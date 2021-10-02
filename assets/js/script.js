@@ -50,4 +50,33 @@ var getForecast = function(data, cityName) {
       })
 }
 
+
+var displayForecast = function(weatherData, cityName) {
+  var cityNameEl = document.querySelector("#city-name");
+  var tempEl = document.querySelector("#temp");
+  var windEl = document.querySelector("#wind");
+  var humidityEL = document.querySelector("#humidity");
+  var uvEl = document.querySelector("#uv-index");
+  if (weatherData.status === "city not found") {
+    console.log("Nothing");
+  }
+  else {
+    cityNameEl.textContent = `${cityName} (${currentDate})`;
+    tempEl.textContent += weatherData.current.temp
+    windEl.textContent += weatherData.current.wind_speed
+    humidityEL.textContent += weatherData.current.humidity
+    uvEl.textContent = weatherData.current.uvi
+    var uvIndex = weatherData.current.uvi
+    if (uvIndex <= 2) {
+      uvEl.classList.add("low")
+    } 
+    else if (3 <= uvIndex <= 7) {
+      uvEl.classList.add("mid")
+    }
+    else if (uvIndex >= 8) {
+      uvEl.classList.add("high")
+    }
+  }
+}
+
 searchBtn.addEventListener("click", formSubmitHandler);

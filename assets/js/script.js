@@ -5,7 +5,6 @@ var infoContainerEl = document.querySelector("#info-container");
 var forecastRowEl = document.querySelector("#forecast-row");
 var alertEl = document.querySelector("#alert");
 var historyContainer = document.querySelector("#city-history");
-var getHistoryStorage = JSON.parse(localStorage.getItem("City History"));
 var cityHistoryBtn = document.querySelector("#city-history");
 
 var currentDate = moment().format("MM/DD/YYYY");
@@ -64,6 +63,7 @@ var getForecast = function(data, cityName) {
 }
 
 var searchHistory = function(cityName) {
+  var getHistoryStorage = JSON.parse(localStorage.getItem("City History"));
   var historyBtn = document.createElement("button");
   if (getHistoryStorage === null) {
     cityHistory.push(cityName);
@@ -76,7 +76,7 @@ var searchHistory = function(cityName) {
   }
   else {
     cityHistory = getHistoryStorage;
-    if (cityHistory.includes(`${cityName}`)) {
+    if (cityHistory.includes(cityName)) {
       return null;
     }
     else {
@@ -92,6 +92,7 @@ var searchHistory = function(cityName) {
 }
 
 var getSearchHistory = function() {
+  var getHistoryStorage = JSON.parse(localStorage.getItem("City History"));
   if (getHistoryStorage === null) {
     return;
   }

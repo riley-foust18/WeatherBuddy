@@ -3,23 +3,24 @@ var resultsContainer = document.querySelector("#results-container");
 var citySearchEl = document.querySelector("#city-search"); 
 var infoContainerEl = document.querySelector("#info-container");
 var forecastRowEl = document.querySelector("#forecast-row");
+var alertEl = document.querySelector("#alert");
+var historyContainer = document.querySelector("#city-history");
+var getHistoryStorage = JSON.parse(localStorage.getItem("City History"));
 
 var currentDate = moment().format("MM/DD/YYYY");
 var dayIndex = 1
-var forecastArray = ["Temp:", "Wind:", "Humidity:"];
-
-
+var cityHistory = [];
 
 var formSubmitHandler = function(event) {
   event.preventDefault();
-  var alertEl = document.querySelector("#alert");
 
   var userCity = citySearchEl.value.trim();
 
   if (userCity) {
     getLatLong(userCity);
     citySearchEl.value = "";
-    alertEl.className = "hide";
+    alertEl.className = "alert"
+    alertEl.classList.add("hide");
   }
   else {
     citySearchEl.value = "";
@@ -33,9 +34,18 @@ var getLatLong = function(userInput) {
       .then(function(response) {
         if (response.ok) {
           response.json().then(function(data) {
-            var cityName = data.name
-            getForecast(data, cityName)
+            var cityName = data.name;
+            getForecast(data, cityName);
+            searchHistory(cityName);
+            // var historyBtn = document.createElement("button");
+            // historyBtn.textContent = cityName;
+            // historyBtn.classList.add("w-100");
+            // historyContainer.appendChild(historyBtn);
           })
+        }
+        else {
+          alertEl.classList.remove("hide");
+          return formSubmitHandler();
         }
       })
 }
@@ -55,6 +65,44 @@ var getForecast = function(data, cityName) {
       })
 }
 
+var searchHistory = function(cityName) {
+  var historyBtn = document.createElement("button");
+  if (getHistoryStorage === null) {
+    cityHistory.push(cityName);
+    historyBtn.textContent = cityName;
+    historyBtn.classList.add("w-100");
+    historyContainer.appendChild(historyBtn);
+    localStorage.setItem("City History", JSON.stringify(cityHistory));
+  }
+  else {
+    cityHistory = getHistoryStorage;
+    if (cityHistory.includes(`${cityName}`)) {
+      return null;
+    }
+    else {
+      historyBtn.textContent = cityName;
+      historyBtn.classList.add("w-100");
+      historyContainer.appendChild(historyBtn);
+      cityHistory.push(cityName);
+      localStorage.setItem("City History", JSON.stringify(cityHistory));
+    }
+  }       
+}
+
+var getSearchHistory = function() {
+  if (getHistoryStorage === null) {
+    return;
+  }
+  else {
+    cityHistory = getHistoryStorage;
+    for (var i = 0; i < cityHistory.length; i++) {
+    var historyBtn = document.createElement("button");
+    historyBtn.textContent = cityHistory[i];
+    historyBtn.classList.add("w-100");
+    historyContainer.appendChild(historyBtn);
+    }
+  }
+}
 
 var displayForecast = function(weatherData, cityName) {
   var cityNameEl = document.querySelector("#city-name");
@@ -99,30 +147,8 @@ var displayForecast = function(weatherData, cityName) {
       i++;
       dayIndex++;
     })
-
-    // for (var i = 0; i < weatherData.daily.length - 3; i++) {
-    //   var futureDay = moment().add(dayIndex, "days").format("MM/DD/YYYY");
-    //   var forecastBoxEl = document.createElement("div");
-    //   var futureDate = document.createElement("h5");
-    //   var futureIcon = document.createElement("img");
-    //   var futureTemp = document.createElement("p");
-    //   var futureWind = document.createElement("p");
-    //   var futureHumidity = document.createElement("p");
-    //   futureDate.textContent = futureDay;
-    //   futureIcon.src = `http://openweathermap.org/img/wn/${weatherData.daily[i].weather[0].icon}.png`
-    //   futureTemp.textContent = `Temp: ${weatherData.daily[i].temp.day}°F`
-    //   futureWind.textContent = `Wind: ${weatherData.daily[i].wind_speed} MPH`
-    //   futureHumidity.textContent = `Humidity: ${weatherData.daily[i].humidity}%`
-    //   forecastBoxEl.className = "forecast-box col-2";
-    //   forecastBoxEl.appendChild(futureDate);
-    //   forecastBoxEl.appendChild(futureIcon);
-    //   forecastBoxEl.appendChild(futureTemp);
-    //   forecastBoxEl.appendChild(futureWind);
-    //   forecastBoxEl.appendChild(futureHumidity);
-    //   forecastRowEl.appendChild(forecastBoxEl);
-    //   dayIndex++;
-    // }
   }
 }
 
+getSearchHistory();
 searchBtn.addEventListener("click", formSubmitHandler);

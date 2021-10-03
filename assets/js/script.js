@@ -6,6 +6,7 @@ var forecastRowEl = document.querySelector("#forecast-row");
 var alertEl = document.querySelector("#alert");
 var historyContainer = document.querySelector("#city-history");
 var getHistoryStorage = JSON.parse(localStorage.getItem("City History"));
+var cityHistoryBtn = document.querySelector("#city-history");
 
 var currentDate = moment().format("MM/DD/YYYY");
 var dayIndex = 1
@@ -37,10 +38,6 @@ var getLatLong = function(userInput) {
             var cityName = data.name;
             getForecast(data, cityName);
             searchHistory(cityName);
-            // var historyBtn = document.createElement("button");
-            // historyBtn.textContent = cityName;
-            // historyBtn.classList.add("w-100");
-            // historyContainer.appendChild(historyBtn);
           })
         }
         else {
@@ -71,6 +68,7 @@ var searchHistory = function(cityName) {
     cityHistory.push(cityName);
     historyBtn.textContent = cityName;
     historyBtn.classList.add("w-100");
+    historyBtn.setAttribute("id", "city-history");
     historyContainer.appendChild(historyBtn);
     localStorage.setItem("City History", JSON.stringify(cityHistory));
   }
@@ -82,6 +80,7 @@ var searchHistory = function(cityName) {
     else {
       historyBtn.textContent = cityName;
       historyBtn.classList.add("w-100");
+      historyBtn.setAttribute("id", "city-history");
       historyContainer.appendChild(historyBtn);
       cityHistory.push(cityName);
       localStorage.setItem("City History", JSON.stringify(cityHistory));
@@ -99,9 +98,15 @@ var getSearchHistory = function() {
     var historyBtn = document.createElement("button");
     historyBtn.textContent = cityHistory[i];
     historyBtn.classList.add("w-100");
+    historyBtn.setAttribute("id", "city-history");
     historyContainer.appendChild(historyBtn);
     }
   }
+}
+
+var recallHistory = function(event) {
+  var cityHistoryText = event.target.textContent;
+  getLatLong(cityHistoryText);
 }
 
 var displayForecast = function(weatherData, cityName) {
@@ -152,3 +157,4 @@ var displayForecast = function(weatherData, cityName) {
 
 getSearchHistory();
 searchBtn.addEventListener("click", formSubmitHandler);
+cityHistoryBtn.addEventListener("click", recallHistory);

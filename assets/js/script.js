@@ -19,7 +19,7 @@ var formSubmitHandler = function(event) {
   if (userCity) {
     getLatLong(userCity);
     citySearchEl.value = "";
-    alertEl.classList.add("hide");
+    alertEl.className = "hide";
   }
   else {
     citySearchEl.value = "";
@@ -69,38 +69,59 @@ var displayForecast = function(weatherData, cityName) {
   else {
     iconImg.src = `http://openweathermap.org/img/wn/${weatherData.current.weather[0].icon}.png`
     cityNameEl.textContent = `${cityName} (${currentDate})`;
-    tempEl.textContent += weatherData.current.temp
-    windEl.textContent += weatherData.current.wind_speed
-    humidityEL.textContent += weatherData.current.humidity
+    tempEl.textContent = weatherData.current.temp
+    windEl.textContent = weatherData.current.wind_speed
+    humidityEL.textContent = weatherData.current.humidity
     uvEl.textContent = weatherData.current.uvi
     var uvIndex = weatherData.current.uvi
     if (uvIndex <= 2) {
-      uvEl.classList.add("low")
+      uvEl.className = "low"
     } 
     else if (3 <= uvIndex <= 7) {
-      uvEl.classList.add("mid")
+      uvEl.className = "mid"
     }
     else if (uvIndex >= 8) {
-      uvEl.classList.add("high")
+      uvEl.className = "high"
     }
-    for (var i = 0; i < weatherData.daily.length - 3; i++) {
+    var i = 0;
+    $(".forecast-box").each(function() {
       var futureDay = moment().add(dayIndex, "days").format("MM/DD/YYYY");
-      var forecastBoxEl = document.createElement("div");
-      var futureDate = document.createElement("h5");
-      var futureTemp = document.createElement("p");
-      var futureWind = document.createElement("p");
-      var futureHumidity = document.createElement("p");
+      var futureDate = $(this).find("span")[0];
+      var futureTemp = $(this).find("span")[1];
+      var futureWind = $(this).find("span")[2];
+      var futureHumidity = $(this).find("span")[3];
+      var futureIcon = $(this).find("img")[0];
       futureDate.textContent = futureDay;
-      futureTemp.textContent = `Temp: ${weatherData.daily[i].temp.day}°F`
-      futureWind.textContent = `Wind: ${weatherData.daily[i].wind_speed} MPH`
-      futureHumidity.textContent = `Humidity: ${weatherData.daily[i].humidity}%`
-      forecastBoxEl.appendChild(futureDate);
-      forecastBoxEl.appendChild(futureTemp);
-      forecastBoxEl.appendChild(futureWind);
-      forecastBoxEl.appendChild(futureHumidity);
-      forecastRowEl.appendChild(forecastBoxEl);
+      futureIcon.src = `http://openweathermap.org/img/wn/${weatherData.daily[i].weather[0].icon}.png`
+      futureTemp.textContent = weatherData.daily[i].temp.day;
+      futureWind.textContent = weatherData.daily[i].wind_speed;
+      futureHumidity.textContent = weatherData.daily[i].humidity;
+      i++;
       dayIndex++;
-    }
+    })
+
+    // for (var i = 0; i < weatherData.daily.length - 3; i++) {
+    //   var futureDay = moment().add(dayIndex, "days").format("MM/DD/YYYY");
+    //   var forecastBoxEl = document.createElement("div");
+    //   var futureDate = document.createElement("h5");
+    //   var futureIcon = document.createElement("img");
+    //   var futureTemp = document.createElement("p");
+    //   var futureWind = document.createElement("p");
+    //   var futureHumidity = document.createElement("p");
+    //   futureDate.textContent = futureDay;
+    //   futureIcon.src = `http://openweathermap.org/img/wn/${weatherData.daily[i].weather[0].icon}.png`
+    //   futureTemp.textContent = `Temp: ${weatherData.daily[i].temp.day}°F`
+    //   futureWind.textContent = `Wind: ${weatherData.daily[i].wind_speed} MPH`
+    //   futureHumidity.textContent = `Humidity: ${weatherData.daily[i].humidity}%`
+    //   forecastBoxEl.className = "forecast-box col-2";
+    //   forecastBoxEl.appendChild(futureDate);
+    //   forecastBoxEl.appendChild(futureIcon);
+    //   forecastBoxEl.appendChild(futureTemp);
+    //   forecastBoxEl.appendChild(futureWind);
+    //   forecastBoxEl.appendChild(futureHumidity);
+    //   forecastRowEl.appendChild(forecastBoxEl);
+    //   dayIndex++;
+    // }
   }
 }
 

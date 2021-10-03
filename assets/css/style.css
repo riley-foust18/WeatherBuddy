@@ -1,4 +1,4 @@
-body {
+* {
   margin: 0;
   box-sizing: border-box;
 }
@@ -12,6 +12,10 @@ header {
   background-image: linear-gradient(45deg, #eb2222 0%, #9820fa 52%, #2b4bff 90%);
 }
 
+main {
+  margin: 10px 20px 10px 10px;
+}
+
 .alert {
   color: red;
   margin: 0;
@@ -22,21 +26,43 @@ header {
   margin: 10px;
 }
 
+.info-container {
+  border: 1px solid black;
+  padding: 5px;
+}
+
+.weather-info {
+  font-weight: 500;
+}
+
+.city-name {
+  font-weight: bold;
+}
+
+.forecast-container {
+  margin-top: 10px;
+}
+
 .forecast-box {
-  background-color: blue;
+  color: white;
+  background-color: #2b4bff;
+  padding: 0 0 0 3px;
 }
 
 .low {
+  border-radius: 3px;
   background-color: green;
   padding: 0 3px;
 }
 
 .mid {
+  border-radius: 3px;
   background-color: yellow;
   padding: 0 3px;
 }
 
 .high {
+  border-radius: 3px;
   background-color: red;
   padding: 0 3px;
 }

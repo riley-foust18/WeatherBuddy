@@ -2,8 +2,13 @@ var searchBtn = document.querySelector("#search-btn");
 var resultsContainer = document.querySelector("#results-container");
 var citySearchEl = document.querySelector("#city-search"); 
 var infoContainerEl = document.querySelector("#info-container");
+var forecastRowEl = document.querySelector("#forecast-row");
 
 var currentDate = moment().format("MM/DD/YYYY");
+var dayIndex = 1
+var forecastArray = ["Temp:", "Wind:", "Humidity:"];
+
+
 
 var formSubmitHandler = function(event) {
   event.preventDefault();
@@ -57,10 +62,12 @@ var displayForecast = function(weatherData, cityName) {
   var windEl = document.querySelector("#wind");
   var humidityEL = document.querySelector("#humidity");
   var uvEl = document.querySelector("#uv-index");
+  var iconImg = document.querySelector("#icon-img");
   if (weatherData.status === "city not found") {
     console.log("Nothing");
   }
   else {
+    iconImg.src = `http://openweathermap.org/img/wn/${weatherData.current.weather[0].icon}.png`
     cityNameEl.textContent = `${cityName} (${currentDate})`;
     tempEl.textContent += weatherData.current.temp
     windEl.textContent += weatherData.current.wind_speed
@@ -75,6 +82,24 @@ var displayForecast = function(weatherData, cityName) {
     }
     else if (uvIndex >= 8) {
       uvEl.classList.add("high")
+    }
+    for (var i = 0; i < weatherData.daily.length - 3; i++) {
+      var futureDay = moment().add(dayIndex, "days").format("MM/DD/YYYY");
+      var forecastBoxEl = document.createElement("div");
+      var futureDate = document.createElement("h5");
+      var futureTemp = document.createElement("p");
+      var futureWind = document.createElement("p");
+      var futureHumidity = document.createElement("p");
+      futureDate.textContent = futureDay;
+      futureTemp.textContent = `Temp: ${weatherData.daily[i].temp.day}°F`
+      futureWind.textContent = `Wind: ${weatherData.daily[i].wind_speed} MPH`
+      futureHumidity.textContent = `Humidity: ${weatherData.daily[i].humidity}%`
+      forecastBoxEl.appendChild(futureDate);
+      forecastBoxEl.appendChild(futureTemp);
+      forecastBoxEl.appendChild(futureWind);
+      forecastBoxEl.appendChild(futureHumidity);
+      forecastRowEl.appendChild(forecastBoxEl);
+      dayIndex++;
     }
   }
 }

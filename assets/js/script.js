@@ -68,6 +68,7 @@ var searchHistory = function(cityName) {
     cityHistory.push(cityName);
     historyBtn.textContent = cityName;
     historyBtn.classList.add("w-100");
+    historyBtn.classList.add("history-btn");
     historyBtn.setAttribute("id", "city-history");
     historyContainer.appendChild(historyBtn);
     localStorage.setItem("City History", JSON.stringify(cityHistory));
@@ -80,6 +81,7 @@ var searchHistory = function(cityName) {
     else {
       historyBtn.textContent = cityName;
       historyBtn.classList.add("w-100");
+      historyBtn.classList.add("history-btn");
       historyBtn.setAttribute("id", "city-history");
       historyContainer.appendChild(historyBtn);
       cityHistory.push(cityName);
@@ -98,6 +100,7 @@ var getSearchHistory = function() {
     var historyBtn = document.createElement("button");
     historyBtn.textContent = cityHistory[i];
     historyBtn.classList.add("w-100");
+    historyBtn.classList.add("history-btn");
     historyBtn.setAttribute("id", "city-history");
     historyContainer.appendChild(historyBtn);
     }

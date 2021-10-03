@@ -36,6 +36,7 @@ var getLatLong = function(userInput) {
         if (response.ok) {
           response.json().then(function(data) {
             var cityName = data.name;
+            dayIndex = 1;
             getForecast(data, cityName);
             searchHistory(cityName);
           })
@@ -109,6 +110,7 @@ var getSearchHistory = function() {
 
 var recallHistory = function(event) {
   var cityHistoryText = event.target.textContent;
+  dayIndex = 1;
   getLatLong(cityHistoryText);
 }
 
